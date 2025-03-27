@@ -1,0 +1,203 @@
+
+
+   :root {
+    
+    --cor-fundo-principal: #ffe4e1; 
+    --cor-fundo-container: #fffaf0; 
+    --cor-titulo: #d87093; 
+    --cor-texto: #333;
+    --cor-borda: #ffb6c1; 
+    --cor-botao-principal: #ff69b4; 
+    --cor-botao-hover: #ff1493; 
+    --cor-botao-destaque: #d87093; 
+
+   
+    --tamanho-fonte-base: 16px;
+    --espacamento-padrao: 15px;
+    --borda-raio-padrao: 5px;
+    --sombra-suave: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--cor-fundo-principal);
+    color: var(--cor-texto);
+}
+
+.container {
+    width: 80%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: var(--cor-fundo-container);
+    border-radius: 8px;
+    box-shadow: var(--sombra-suave);
+}
+
+h1, h2 {
+    color: var(--cor-titulo);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.botao {
+    display: inline-block;
+    padding: var(--espacamento-padrao) calc(var(--espacamento-padrao) * 2);
+    margin: 10px 0;
+    text-decoration: none;
+    background-color: var(--cor-botao-principal);
+    color: white;
+    border-radius: var(--borda-raio-padrao);
+    font-size: var(--tamanho-fonte-base);
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.botao:hover {
+    background-color: var(--cor-botao-hover);
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--cor-titulo);
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--cor-borda);
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.btn-primary {
+    background-color: var(--cor-botao-principal);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--cor-botao-hover);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+}
+
+.table th,
+.table td {
+    border: 1px solid var(--cor-borda);
+    padding: 8px;
+    text-align: left;
+}
+
+.table th {
+    background-color: var(--cor-fundo-principal);
+    font-weight: bold;
+}
+
+#total {
+    margin-top: 20px;
+    text-align: right;
+    font-size: 1.2em;
+    color: var(--cor-titulo);
+}
+
+#total strong {
+    color: var(--cor-botao-principal);
+}
+
+#formulario-estoque,
+#formulario-venda {
+    margin-bottom: 20px;
+    padding: var(--espacamento-padrao);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--borda-raio-padrao);
+    background-color: #fff;
+}
+
+#produtos-venda,
+#historico-vendas {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+}
+
+#produtos-venda th,
+#produtos-venda td,
+#historico-vendas th,
+#historico-vendas td {
+    border: 1px solid var(--cor-borda);
+    padding: 8px;
+    text-align: center;
+}
+
+#produtos-venda th,
+#historico-vendas th {
+    background-color: var(--cor-fundo-principal);
+    font-weight: bold;
+}
+
+#finalizar {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    padding: var(--espacamento-padrao) calc(var(--espacamento-padrao) * 2);
+    background-color: var(--cor-botao-destaque);
+    color: white;
+    border: none;
+    border-radius: var(--borda-raio-padrao);
+    font-size: var(--tamanho-fonte-base);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#finalizar:hover {
+    background-color: #b05c78;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+    }
+
+    .botao {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+#finalizar {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    padding: var(--espacamento-padrao) calc(var(--espacamento-padrao) * 2);
+    background-color: var(--cor-botao-destaque);
+    color: white;
+    border: none;
+    border-radius: var(--borda-raio-padrao);
+    font-size: var(--tamanho-fonte-base);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+#finalizar:hover {
+    background-color: #b05c78;
+}

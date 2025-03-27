@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Funcionários</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Cadastro de Funcionários</h1>
+
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome:</label>
+                    <input type="text" id="nome" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="cargo" class="form-label">Cargo:</label>
+                    <input type="text" id="cargo" class="form-control">
+                </div>
+                <button id="cadastrar" class="btn btn-primary">Cadastrar</button>
+            </div>
+        </div>
+
+        <h2 class="mt-4">Funcionários Cadastrados</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Cargo</th>
+                </tr>
+            </thead>
+            <tbody id="listaFuncionarios">
+            </tbody>
+        </table>
+    </div>
+
+    <script src="cadastro.js"></script>
+</body>
+</html>
