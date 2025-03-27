@@ -1,110 +1,142 @@
-const nomeProdutoInput = document.getElementById('nomeProduto');
-const quantidadeInput = document.getElementById('quantidade');
-const precoInput = document.getElementById('preco');
-const adicionarBotao = document.getElementById('adicionar');
-const produtosVendaTabela = document.getElementById('produtos-venda').getElementsByTagName('tbody')[0];
-const valorTotalSpan = document.getElementById('valor-total');
-const historicoVendasTabela = document.getElementById('historico-vendas').getElementsByTagName('tbody')[0];
-const finalizarBotao = document.getElementById('finalizar');
-const estoqueTabela = document.getElementById('estoque').getElementsByTagName('tbody')[0];
+document.addEventListener('DOMContentLoaded', function() {
+    const nomeFuncionarioInput = document.getElementById('nomeFuncionario');
+    const nomeProdutoInput = document.getElementById('nomeProduto');
+    const quantidadeInput = document.getElementById('quantidade');
+    const precoInput = document.getElementById('preco');
+    const adicionarButton = document.getElementById('adicionar');
+    const produtosVendaTableBody = document.querySelector('#produtos-venda tbody');
+    const valorTotalSpan = document.getElementById('valor-total');
+    const finalizarButton = document.getElementById('finalizar');
+    const historicoVendasTableBody = document.querySelector('#historico-vendas tbody');
+    const estoqueTableBody = document.querySelector('#estoque tbody');
 
-let produtosVenda = [];
-let historicoVendas = JSON.parse(localStorage.getItem('historicoVendas')) || [];
-let estoque = JSON.parse(localStorage.getItem('estoque')) || [];
+    let totalVenda = 0;
+    let vendaAtual = [];
 
-function atualizarEstoqueTabela() {
-    estoqueTabela.innerHTML = '';
-    estoque.forEach(produto => {
-        let linha = estoqueTabela.insertRow();
-        let colunaNome = linha.insertCell(0);
-        let colunaQuantidade = linha.insertCell(1);
+    function atualizarEstoqueTabela() {
+        let estoque = JSON.parse(localStorage.getItem('estoque')) || [];
+        estoqueTableBody.innerHTML = ''; // Limpa a tabela
 
-        colunaNome.textContent = produto.nome;
-        colunaQuantidade.textContent = produto.quantidade;
-    });
-}
+        estoque.forEach(produto => {
+            const newRow = document.createElement('tr');
+            const nomeProdutoCell = document.createElement('td');
+            const quantidadeCell = document.createElement('td');
 
-function atualizarProdutosVenda() {
-    produtosVendaTabela.innerHTML = '';
-    let total = 0;
-    produtosVenda.forEach(produto => {
-        let linha = produtosVendaTabela.insertRow();
-        let colunaNome = linha.insertCell(0);
-        let colunaQuantidade = linha.insertCell(1);
-        let colunaPreco = linha.insertCell(2);
-        let colunaTotal = linha.insertCell(3);
+            nomeProdutoCell.textContent = produto.nome;
+            quantidadeCell.textContent = produto.quantidade;
 
-        colunaNome.textContent = produto.nome;
-        colunaQuantidade.textContent = produto.quantidade;
-        colunaPreco.textContent = produto.preco.toFixed(2);
-        colunaTotal.textContent = produto.total.toFixed(2);
-
-        total += produto.total;
-    });
-    valorTotalSpan.textContent = total.toFixed(2);
-}
-
-function adicionarProduto() {
-    const nome = nomeProdutoInput.value;
-    const quantidade = parseInt(quantidadeInput.value);
-    const preco = parseFloat(precoInput.value);
-
-    if (nome && quantidade > 0 && preco > 0) {
-        const total = quantidade * preco;
-        produtosVenda.push({ nome, quantidade, preco, total });
-        atualizarProdutosVenda();
-        nomeProdutoInput.value = '';
-        quantidadeInput.value = '';
-        precoInput.value = '';
-    } else {
-        alert('Por favor, preencha todos os campos corretamente.');
+            newRow.appendChild(nomeProdutoCell);
+            newRow.appendChild(quantidadeCell);
+            estoqueTableBody.appendChild(newRow);
+        });
     }
-}
 
-function finalizarVenda() {
-    const data = new Date().toLocaleString();
-    produtosVenda.forEach(produto => {
-        historicoVendas.push({ ...produto, data });
-        atualizarEstoque(produto.nome, produto.quantidade);
-    });
-    localStorage.setItem('historicoVendas', JSON.stringify(historicoVendas));
-    produtosVenda = [];
-    atualizarProdutosVenda();
-    atualizarHistoricoVendas();
-}
+    atualizarEstoqueTabela(); // Carrega o estoque inicial na tabela
 
-function atualizarEstoque(nomeProduto, quantidadeVendida) {
-    estoque = estoque.map(produto => {
-        if (produto.nome === nomeProduto) {
-            produto.quantidade -= quantidadeVendida;
+    adicionarButton.addEventListener('click', function() {
+        const nomeFuncionario = nomeFuncionarioInput.value;
+        const nomeProduto = nomeProdutoInput.value;
+        const quantidade = parseInt(quantidadeInput.value);
+        const preco = parseFloat(precoInput.value);
+
+        if (nomeProduto && !isNaN(quantidade) && !isNaN(preco)) {
+            let estoque = JSON.parse(localStorage.getItem('estoque')) || [];
+            const produtoEstoque = estoque.find(produto => produto.nome === nomeProduto);
+
+            if (!produtoEstoque || produtoEstoque.quantidade < quantidade) {
+                alert(`Estoque insuficiente para ${nomeProduto}.`);
+                return;
+            }
+
+            const totalProduto = quantidade * preco;
+
+            const newRow = document.createElement('tr');
+            const nomeProdutoCell = document.createElement('td');
+            const quantidadeCell = document.createElement('td');
+            const precoCell = document.createElement('td');
+            const totalCell = document.createElement('td');
+
+            nomeProdutoCell.textContent = nomeProduto;
+            quantidadeCell.textContent = quantidade;
+            precoCell.textContent = preco.toFixed(2);
+            totalCell.textContent = totalProduto.toFixed(2);
+
+            newRow.appendChild(nomeProdutoCell);
+            newRow.appendChild(quantidadeCell);
+            newRow.appendChild(precoCell);
+            newRow.appendChild(totalCell);
+
+            produtosVendaTableBody.appendChild(newRow);
+
+            totalVenda += totalProduto;
+            valorTotalSpan.textContent = totalVenda.toFixed(2);
+
+            vendaAtual.push({
+                nomeFuncionario: nomeFuncionario,
+                nomeProduto: nomeProduto,
+                quantidade: quantidade,
+                preco: preco,
+                total: totalProduto
+            });
+
+            nomeProdutoInput.value = '';
+            quantidadeInput.value = '';
+            precoInput.value = '';
+        } else {
+            alert('Por favor, preencha todos os campos corretamente.');
         }
-        return produto;
     });
-    localStorage.setItem('estoque', JSON.stringify(estoque));
-    atualizarEstoqueTabela();
-}
 
-function atualizarHistoricoVendas() {
-    historicoVendasTabela.innerHTML = '';
-    historicoVendas.forEach(venda => {
-        let linha = historicoVendasTabela.insertRow();
-        let colunaNome = linha.insertCell(0);
-        let colunaQuantidade = linha.insertCell(1);
-        let colunaPreco = linha.insertCell(2);
-        let colunaTotal = linha.insertCell(3);
-        let colunaData = linha.insertCell(4);
+    finalizarButton.addEventListener('click', function() {
+        if (vendaAtual.length > 0) {
+            const dataVenda = new Date();
+            const dataFormatada = dataVenda.toLocaleString();
 
-        colunaNome.textContent = venda.nome;
-        colunaQuantidade.textContent = venda.quantidade;
-        colunaPreco.textContent = venda.preco.toFixed(2);
-        colunaTotal.textContent = venda.total.toFixed(2);
-        colunaData.textContent = venda.data;
+            vendaAtual.forEach(item => {
+                const newRowHistorico = document.createElement('tr');
+                const nomeFuncionarioCell = document.createElement('td');
+                const nomeProdutoCell = document.createElement('td');
+                const quantidadeCell = document.createElement('td');
+                const precoCell = document.createElement('td');
+                const totalCell = document.createElement('td');
+                const dataCell = document.createElement('td');
+
+                nomeFuncionarioCell.textContent = item.nomeFuncionario;
+                nomeProdutoCell.textContent = item.nomeProduto;
+                quantidadeCell.textContent = item.quantidade;
+                precoCell.textContent = item.preco.toFixed(2);
+                totalCell.textContent = item.total.toFixed(2);
+                dataCell.textContent = dataFormatada;
+
+                newRowHistorico.appendChild(nomeFuncionarioCell);
+                newRowHistorico.appendChild(nomeProdutoCell);
+                newRowHistorico.appendChild(quantidadeCell);
+                newRowHistorico.appendChild(precoCell);
+                newRowHistorico.appendChild(totalCell);
+                newRowHistorico.appendChild(dataCell);
+
+                historicoVendasTableBody.appendChild(newRowHistorico);
+
+                atualizarEstoque(item.nomeProduto, item.quantidade);
+            });
+
+            produtosVendaTableBody.innerHTML = '';
+            totalVenda = 0;
+            valorTotalSpan.textContent = '0.00';
+            vendaAtual = [];
+        } else {
+            alert('Adicione produtos à venda antes de finalizar.');
+        }
     });
-}
 
-adicionarBotao.addEventListener('click', adicionarProduto);
-finalizarBotao.addEventListener('click', finalizarVenda);
+    function atualizarEstoque(nomeProduto, quantidadeVendida) {
+        let estoque = JSON.parse(localStorage.getItem('estoque')) || [];
+        const produtoEstoque = estoque.find(produto => produto.nome === nomeProduto);
 
-atualizarEstoqueTabela();
-atualizarProdutosVenda();
-atualizarHistoricoVendas();
+        if (produtoEstoque) {
+            produtoEstoque.quantidade -= quantidadeVendida;
+            localStorage.setItem('estoque', JSON.stringify(estoque));
+            atualizarEstoqueTabela(); // Atualiza a tabela de estoque
+        }
+    }
+});

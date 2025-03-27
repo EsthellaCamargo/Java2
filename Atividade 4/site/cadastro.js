@@ -1,37 +1,61 @@
-const nomeInput = document.getElementById('nome');
-const cargoInput = document.getElementById('cargo');
-const cadastrarBotao = document.getElementById('cadastrar');
-const listaFuncionariosTabela = document.getElementById('listaFuncionarios');
+document.addEventListener('DOMContentLoaded', function() {
+    const idInput = document.getElementById('id');
+    const nomeInput = document.getElementById('nome');
+    const cargoInput = document.getElementById('cargo');
+    const cadastrarButton = document.getElementById('cadastrar');
+    const listaFuncionarios = document.getElementById('listaFuncionarios');
 
-let funcionarios = JSON.parse(localStorage.getItem('funcionarios')) || [];
+    let funcionarios = JSON.parse(localStorage.getItem('funcionarios')) || [];
 
-function atualizarListaFuncionarios() {
-    listaFuncionariosTabela.innerHTML = '';
-    funcionarios.forEach(funcionario => {
-        const linha = listaFuncionariosTabela.insertRow();
-        const colunaNome = linha.insertCell(0);
-        const colunaCargo = linha.insertCell(1);
+    function renderizarFuncionarios() {
+        listaFuncionarios.innerHTML = '';
+        funcionarios.forEach((funcionario, index) => { // Adiciona o índice como segundo parâmetro
+            const newRow = document.createElement('tr');
+            const idCell = document.createElement('td');
+            const nomeCell = document.createElement('td');
+            const cargoCell = document.createElement('td');
+            const acoesCell = document.createElement('td'); // Nova célula para o botão
+            const removerButton = document.createElement('button'); // Novo botão
 
-        colunaNome.textContent = funcionario.nome;
-        colunaCargo.textContent = funcionario.cargo;
-    });
-    localStorage.setItem('funcionarios', JSON.stringify(funcionarios));
-}
+            idCell.textContent = funcionario.id;
+            nomeCell.textContent = funcionario.nome;
+            cargoCell.textContent = funcionario.cargo;
 
-function cadastrarFuncionario() {
-    const nome = nomeInput.value;
-    const cargo = cargoInput.value;
+            removerButton.textContent = 'Remover';
+            removerButton.classList.add('btn', 'btn-danger', 'btn-sm'); // Adiciona classes Bootstrap
+            removerButton.addEventListener('click', function() {
+                funcionarios.splice(index, 1); // Remove o funcionário do array
+                localStorage.setItem('funcionarios', JSON.stringify(funcionarios)); // Atualiza o localStorage
+                renderizarFuncionarios(); // Atualiza a tabela
+            });
 
-    if (nome && cargo) {
-        funcionarios.push({ nome, cargo });
-        atualizarListaFuncionarios();
-        nomeInput.value = '';
-        cargoInput.value = '';
-    } else {
-        alert('Por favor, preencha todos os campos.');
+            acoesCell.appendChild(removerButton); // Adiciona o botão à célula de ações
+            newRow.appendChild(idCell);
+            newRow.appendChild(nomeCell);
+            newRow.appendChild(cargoCell);
+            newRow.appendChild(acoesCell); // Adiciona a célula de ações à linha
+
+            listaFuncionarios.appendChild(newRow);
+        });
     }
-}
 
-cadastrarBotao.addEventListener('click', cadastrarFuncionario);
+    renderizarFuncionarios();
 
-atualizarListaFuncionarios();
+    cadastrarButton.addEventListener('click', function() {
+        const id = idInput.value;
+        const nome = nomeInput.value;
+        const cargo = cargoInput.value;
+
+        if (id && nome && cargo) {
+            funcionarios.push({ id: id, nome: nome, cargo: cargo });
+            localStorage.setItem('funcionarios', JSON.stringify(funcionarios));
+            renderizarFuncionarios();
+
+            idInput.value = '';
+            nomeInput.value = '';
+            cargoInput.value = '';
+        } else {
+            alert('Por favor, preencha todos os campos.');
+        }
+    });
+});

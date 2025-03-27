@@ -1,44 +1,59 @@
-const nomeProdutoInput = document.getElementById('nomeProduto');
-const quantidadeInput = document.getElementById('quantidade');
-const adicionarBotao = document.getElementById('adicionar');
-const estoqueTabela = document.getElementById('estoque').getElementsByTagName('tbody')[0];
+document.addEventListener('DOMContentLoaded', function() {
+    const nomeProdutoInput = document.getElementById('nomeProduto');
+    const quantidadeInput = document.getElementById('quantidade');
+    const adicionarButton = document.getElementById('adicionar');
+    const estoqueTableBody = document.querySelector('#estoque tbody');
 
-let estoque = JSON.parse(localStorage.getItem('estoque')) || [];
+    let estoque = JSON.parse(localStorage.getItem('estoque')) || [];
 
-function atualizarEstoqueTabela() {
-    estoqueTabela.innerHTML = '';
-    estoque.forEach((produto, index) => {
-        let linha = estoqueTabela.insertRow();
-        let colunaNome = linha.insertCell(0);
-        let colunaQuantidade = linha.insertCell(1);
-        let colunaAcoes = linha.insertCell(2);
+    function renderizarEstoque() {
+        estoqueTableBody.innerHTML = '';
+        estoque.forEach((produto, index) => {
+            const newRow = document.createElement('tr');
+            const nomeProdutoCell = document.createElement('td');
+            const quantidadeCell = document.createElement('td');
+            const acoesCell = document.createElement('td');
+            const removerButton = document.createElement('button');
 
-        colunaNome.textContent = produto.nome;
-        colunaQuantidade.textContent = produto.quantidade;
-        colunaAcoes.innerHTML = `<button onclick="removerProduto(${index})">Remover</button>`;
-    });
-    localStorage.setItem('estoque', JSON.stringify(estoque));
-}
+            nomeProdutoCell.textContent = produto.nome;
+            quantidadeCell.textContent = produto.quantidade;
 
-function adicionarProduto() {
-    const nome = nomeProdutoInput.value;
-    const quantidade = parseInt(quantidadeInput.value);
+            removerButton.textContent = 'Remover';
+            removerButton.addEventListener('click', function() {
+                estoque.splice(index, 1);
+                localStorage.setItem('estoque', JSON.stringify(estoque));
+                renderizarEstoque();
+            });
 
-    if (nome && quantidade > 0) {
-        estoque.push({ nome, quantidade });
-        atualizarEstoqueTabela();
-        nomeProdutoInput.value = '';
-        quantidadeInput.value = '';
-    } else {
-        alert('Por favor, preencha todos os campos corretamente.');
+            acoesCell.appendChild(removerButton);
+            newRow.appendChild(nomeProdutoCell);
+            newRow.appendChild(quantidadeCell);
+            newRow.appendChild(acoesCell);
+
+            estoqueTableBody.appendChild(newRow);
+        });
     }
-}
 
-function removerProduto(index) {
-    estoque.splice(index, 1);
-    atualizarEstoqueTabela();
-}
+    renderizarEstoque();
 
-adicionarBotao.addEventListener('click', adicionarProduto);
+    adicionarButton.addEventListener('click', function() {
+        const nomeProduto = nomeProdutoInput.value;
+        const quantidade = parseInt(quantidadeInput.value);
 
-atualizarEstoqueTabela();
+        if (nomeProduto && !isNaN(quantidade)) {
+            const produtoExistente = estoque.find(produto => produto.nome === nomeProduto);
+            if (produtoExistente) {
+                produtoExistente.quantidade += quantidade;
+            } else {
+                estoque.push({ nome: nomeProduto, quantidade: quantidade });
+            }
+            localStorage.setItem('estoque', JSON.stringify(estoque));
+            renderizarEstoque();
+
+            nomeProdutoInput.value = '';
+            quantidadeInput.value = '';
+        } else {
+            alert('Por favor, insira um nome de produto válido e uma quantidade numérica.');
+        }
+    });
+});
