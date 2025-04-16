@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprovação de Propaganda</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+        .propaganda-preview {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .buttons {
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+        .aprovado {
+            background-color: #4682B4;
+            color: white;
+            border: none;
+        }
+        .rejeitado {
+            background-color: #f44336;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Aprovação de Propaganda</h1>
+        <div class="propaganda-preview">
+            <form>
+                <label for="Titulo">Nome Da Propaganda:</label><br>
+                <input type="text" id="Titulo" name="Titulo"><br><br>
+
+                <label for="Descrição">Descrição da Propaganda:</label><br>
+                <textarea id="Descrição" name="Descrição" rows="4" cols="50"></textarea><br><br>
+
+                <label for="Fornecedor">Fornecedor:</label><br>
+                <input type="text" id="Fornecedor" name="Fornecedor"><br><br>
+
+                <label for="Orcamento">Orçamento Total:</label><br>
+                <input type="number" id="Orcamento" name="Orcamento"><br><br>
+            </form>
+            <img src="https://i.pinimg.com/736x/78/6e/1f/786e1f5e8bbd206f3631df5d1f51544f.jpg" alt="Prévia da Propaganda" style="max-width: 100%;">
+        </div>
+        <div class="buttons">
+            <button class="aprovado">Aprovar</button>
+            <button class="rejeitado">Rejeitar</button>
+        </div>
+    </div>
+    <script>
+        
+        const botaoAprovado = document.querySelector('.aprovado');
+        const botaoRejeitado = document.querySelector('.rejeitado');
+
+        botaoAprovado.addEventListener('click', () => {
+            alert('Propaganda aprovada!');
+           
+        });
+
+        botaoRejeitado.addEventListener('click', () => {
+            const motivo = prompt('Por que você está rejeitando esta propaganda?');
+            if (motivo) {
+                alert(`Propaganda rejeitada. Motivo: ${motivo}`);
+                
+            }
+        });
+    </script>
+</body>
+</html>
