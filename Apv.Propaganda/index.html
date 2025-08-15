@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprovação de Propaganda</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 class="main-title">Revisão de Campanha de Marketing</h1>
+        
+        <div class="content-wrapper">
+            <div class="form-container">
+                <form id="approval-form">
+                    <div class="form-group">
+                        <label for="titulo">Nome da Campanha:</label>
+                        <input type="text" id="titulo" name="titulo" placeholder="Nome da campanha..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="descricao">Descrição:</label>
+                        <textarea id="descricao" name="descricao" rows="8" placeholder="Descreva os objetivos, público-alvo e canais..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fornecedor">Fornecedor:</label>
+                        <input type="text" id="fornecedor" name="fornecedor" placeholder="Nome do fornecedor..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orcamento">Orçamento Total:</label>
+                        <input type="number" id="orcamento" name="orcamento" placeholder="Ex: 50000" min="0" required>
+                    </div>
+                </form>
+            </div>
+            
+            <div id="rejection-reason-container" style="display: none;">
+                <div class="form-group">
+                    <label for="rejection-reason">Motivo da Rejeição:</label>
+                    <textarea id="rejection-reason" name="rejection-reason" rows="4" placeholder="Descreva o motivo da rejeição..." required></textarea>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="buttons">
+            <button id="approve-button" class="btn approved">Aprovar</button>
+            <button id="reject-button" class="btn rejected">Rejeitar</button>
+        </div>
+
+        <div id="status-message" class="status-message"></div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
